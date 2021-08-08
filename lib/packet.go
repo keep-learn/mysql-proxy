@@ -16,8 +16,10 @@ func (p Packet) Size() int {
 	return int(uint32(head[0]) | uint32(head[1])<<8 | uint32(head[2])<<16)
 }
 
-func (p Packet) Id() byte {
-	return p.raw[3]
+// 也就是 Length Coded Binary，其数据长度不固定，长度值由数据前的 1-9 个字节决定，其中长度值所占的字节数不定，字节数由第 1 个字节决定，如下：
+//0-250            0   第一个字节值即为数据的真实长度
+func (p Packet) Id() []byte {
+	return p.raw[0:3]
 }
 
 func (p Packet) Data() []byte {

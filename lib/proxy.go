@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"fmt"
 	"net"
 )
 
@@ -110,6 +111,8 @@ func (p *ProxyConn) PipeClient2Mysql() {
 			p.CloseClient()
 			break
 		}
+		fmt.Println("client-data:", string(packet.Data()))
+		fmt.Println("client-id:", packet.Id())
 		if len(packet.Data()) == 1 && packet.Data()[0] == 1 {
 			// ignore client close command
 		} else {
@@ -125,6 +128,8 @@ func (p *ProxyConn) PipeMysql2Client() {
 			p.Close()
 			break
 		}
+		fmt.Println("server-data:", string(packet.Data()))
+		fmt.Println("server-id:", packet.Id())
 		p.SendClient(packet)
 	}
 }
